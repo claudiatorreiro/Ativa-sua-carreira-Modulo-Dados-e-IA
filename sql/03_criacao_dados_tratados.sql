@@ -1,6 +1,6 @@
--- Criação da tabela tratada de músicas do Spotify
--- Os nulos encontrados em main_music_genre e main_country foram mantidos
--- por representarem baixa quantidade e não comprometerem a análise.
+-- Projeto: Análise de sucesso de músicas no Spotify
+-- Etapa: Criação de dados tratados
+-- Objetivo: Aplicar tratamento de dados (substituição de valores nulos)
 
 CREATE OR REPLACE TABLE `projeto-01-rota-b-claudia.dados_tratados.musicas_spotify_tratada` AS
 SELECT *
