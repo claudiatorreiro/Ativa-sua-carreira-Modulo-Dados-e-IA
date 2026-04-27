@@ -1,111 +1,92 @@
-# 🎧 Análise de Dados – Sucesso de Músicas no Spotify
+# 🎧 Projeto de Análise de Dados – Spotify e Concorrentes
 
-## 📌 Sobre o Projeto
+Este projeto foi desenvolvido como parte do **Módulo de Dados e Inteligência Artificial da Laboratória**, integrando o programa **Ativa sua Carreira**.
 
-Este projeto foi desenvolvido como parte do **módulo de Dados e Inteligência Artificial** do programa **Ativa sua Carreira**, da Laboratória.
-
-O objetivo é analisar um conjunto de dados de músicas para identificar possíveis fatores que indicam o sucesso de uma música no Spotify, medido pela quantidade de reproduções (*streams*).
+O objetivo é aplicar técnicas de **tratamento, organização e análise de dados** utilizando SQL no BigQuery, simulando um cenário real de análise de dados musicais.
 
 ---
 
-## 🎯 Objetivo da Análise
+## 🎯 Objetivo
 
-Investigar quais variáveis podem influenciar o sucesso de uma música, como:
-
-* Presença em playlists
-* Aparição em charts
-* Gênero musical
-* País de origem
-* Plataformas concorrentes
+Analisar dados de músicas do Spotify e plataformas concorrentes, garantindo qualidade dos dados e preparando a base para análises futuras.
 
 ---
 
-## 🛠️ Ferramentas Utilizadas
+## 🛠️ Tecnologias utilizadas
 
-* **Google BigQuery** – processamento e análise de dados com SQL
-* **SQL** – consultas, limpeza e transformação dos dados
-* **GitHub** – versionamento e documentação do projeto
-
----
-
-## 📊 Estrutura dos Dados
-
-O projeto foi organizado em três camadas, seguindo boas práticas de análise de dados:
-
-* **Insumos**: dados originais importados diretamente das fontes, sem alterações.
-* **Dados brutos**: dados organizados e padronizados a partir dos insumos.
-* **Dados tratados**: dados preparados para análise, com aplicação de tratamentos (como substituição de valores nulos).
-
-Essa separação permite maior controle, rastreabilidade e segurança no processo de análise.
-
-### 🔄 Fluxo dos dados
-
-Insumos → Dados Brutos → Dados Tratados → Análise
+- Google BigQuery
+- SQL
+- GitHub (versionamento)
+- Metodologia de análise de dados
 
 ---
 
-## 🧪 Etapas do Projeto
+## 📊 Estrutura do Projeto
 
-### 1. Preparação dos dados
+Os dados foram organizados em três camadas:
 
-* Criação do projeto e dataset no BigQuery
-* Importação das tabelas
-
-### 2. Identificação de valores nulos
-
-* Uso de `COUNT`, `COUNTIF` e `IS NULL`
-* Análise da presença de dados ausentes
-
-### 3. Tratamento de dados
-
-* Substituição de valores nulos na variável `in_shazam_charts` por `0`
-* Manutenção de nulos em variáveis com baixo impacto na análise
-
-### 4. Organização dos dados
-
-* Separação entre dados brutos e dados tratados
-* Padronização de nomes e estrutura
-
-### 5. Validação
-
-* Verificação pós-tratamento para garantir consistência dos dados
+- **Insumos (`Insumos_Rota_B`)** → dados originais
+- **Dados Brutos (`dados_brutos`)** → cópia dos dados sem alteração
+- **Dados Tratados (`dados_tratados`)** → dados limpos e preparados para análise
 
 ---
 
-## 📂 Estrutura do Repositório
+## 🔄 Pipeline de Dados
 
-```text
-.
-├── README.md
-└── sql/
-    ├── 01_identificacao_nulos.sql
-    ├── 02_criacao_dados_brutos.sql
-    ├── 03_criacao_dados_tratados.sql
-    └── 04_validacao_tratamento.sql
+1. Identificação de valores nulos
+2. Criação das tabelas de dados brutos
+3. Tratamento dos dados
+4. Identificação e tratamento de duplicidades
+5. Validação dos dados tratados
+
+---
+
+## 🔍 Principais Análises Realizadas
+
+- Identificação de valores nulos
+- Identificação de registros duplicados
+- Análise de consistência dos dados
+- Validação após tratamento
+
+---
+
+## 📁 Estrutura do Repositório
+
+```
+📁 sql/
+├── 01_identificacao_nulos.sql
+├── 02_criacao_dados_brutos.sql
+├── 03_tratamento_spotify.sql
+└── 04_validacoes.sql
+
+📁 docs/
+└── ficha_tecnica.md
 ```
 
 ---
 
-## 🧠 Principais Decisões
+## 📌 Destaques Técnicos
 
-* Separação em camadas (insumos, bruto e tratado) para garantir rastreabilidade
-* Tratamento de valores nulos apenas quando necessário
-* Organização das consultas SQL por etapas do projeto
+- Separação clara entre dados brutos e tratados
+- Uso de `GROUP BY` e `HAVING` para identificação de duplicidades
+- Aplicação de `ROW_NUMBER()` para tratamento de duplicados
+- Validação de consistência após tratamento
+
+---
+
+## 📄 Documentação Completa
+
+A documentação detalhada do projeto está disponível em:
+
+👉 `docs/ficha_tecnica.md`
 
 ---
 
 ## 🚀 Próximos Passos
 
-* Identificação de dados duplicados
-* Análise exploratória dos dados (EDA)
-* Cruzamento das tabelas (JOIN)
-* Criação de visualizações e insights
-
----
-
-## 👩‍💻 Sobre mim
-
-Profissional com experiência em gestão pública e Direito, em transição para a área de tecnologia e dados, integrando análise, raciocínio lógico e tomada de decisão baseada em dados.
+- Análise exploratória dos dados
+- Criação de visualizações
+- Geração de insights de negócio
 
 ---
 
