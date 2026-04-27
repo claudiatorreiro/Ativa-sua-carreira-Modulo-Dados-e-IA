@@ -1,4 +1,6 @@
--- Criação das tabelas de dados brutos
+-- Projeto: Análise de sucesso de músicas no Spotify
+-- Etapa: Criação de dados brutos
+-- Objetivo: Organizar os dados originais em um dataset estruturado
 
 CREATE OR REPLACE TABLE `projeto-01-rota-b-claudia.dados_brutos.musicas_spotify` AS
 SELECT *
