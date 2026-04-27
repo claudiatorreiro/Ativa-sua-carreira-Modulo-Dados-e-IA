@@ -1,4 +1,6 @@
--- Validação após criação das tabelas tratadas
+-- Projeto: Análise de sucesso de músicas no Spotify
+-- Etapa: Validação do tratamento
+-- Objetivo: Garantir que os valores nulos foram corretamente tratados
 
 SELECT
   COUNT(*) AS total_linhas,
