@@ -1,6 +1,6 @@
 -- Projeto: Análise de sucesso de músicas no Spotify
 -- Etapa: Validação do tratamento
--- Objetivo: Garantir que os valores nulos foram corretamente tratados
+-- Objetivo: Garantir que os valores nulos tratados foram substituídos corretamente
 
 SELECT
   COUNT(*) AS total_linhas,
