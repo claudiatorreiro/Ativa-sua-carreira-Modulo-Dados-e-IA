@@ -33,10 +33,10 @@ Os dados foram organizados em três camadas:
 
 ## 🔄 Pipeline de Dados
 
-1. Identificação de valores nulos
-2. Criação das tabelas de dados brutos
-3. Tratamento dos dados
-4. Identificação e tratamento de duplicidades
+1. Criação das tabelas de dados brutos
+2. Identificação de valores nulos
+3. Tratamento dos dados (valores nulos)
+4. Identificação de registros duplicados
 5. Validação dos dados tratados
 
 ---
@@ -48,6 +48,13 @@ Os dados foram organizados em três camadas:
 - Análise de consistência dos dados
 - Validação após tratamento
 
+---
+
+## 🧩 Decisões de Tratamento
+
+- Valores nulos na coluna `in_shazam_charts` foram substituídos por 0, pois indicam ausência de presença nas paradas musicais.
+- A tabela de músicas do Spotify foi mantida sem alterações nesta etapa, pois não foram identificados valores nulos relevantes para tratamento imediato.
+  
 ---
 
 ## 📁 Estrutura do Repositório
@@ -69,7 +76,6 @@ Os dados foram organizados em três camadas:
 
 - Separação clara entre dados brutos e tratados
 - Uso de `GROUP BY` e `HAVING` para identificação de duplicidades
-- Aplicação de `ROW_NUMBER()` para tratamento de duplicados
 - Validação de consistência após tratamento
 
 ---
