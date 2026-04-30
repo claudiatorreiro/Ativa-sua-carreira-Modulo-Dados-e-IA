@@ -63,8 +63,10 @@ Os dados foram organizados em três camadas:
 📁 sql/
 ├── 01_identificacao_nulos.sql
 ├── 02_criacao_dados_brutos.sql
-├── 03_tratamento_spotify.sql
-└── 04_validacoes.sql
+├── 03_criacao_dados_tratados.sql
+├── 04_validacao_tratamento.sql
+├── 05_identificacao_duplicados.sql
+└── 06_remocao_duplicados.sql
 
 📁 docs/
 └── ficha_tecnica.md
