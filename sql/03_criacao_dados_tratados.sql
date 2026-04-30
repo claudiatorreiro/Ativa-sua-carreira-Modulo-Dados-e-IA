@@ -1,15 +1,16 @@
 -- Projeto: Análise de sucesso de músicas no Spotify
 -- Etapa: Criação de dados tratados
--- Objetivo: Aplicar tratamento de dados (substituição de valores nulos)
+-- Objetivo: Criar tabelas tratadas a partir dos dados brutos
 
+-- A tabela do Spotify foi mantida sem alterações nesta etapa,
+-- pois os campos principais necessários para a análise foram preservados.
 CREATE OR REPLACE TABLE `projeto-01-rota-b-claudia.dados_tratados.musicas_spotify_tratada` AS
 SELECT *
 FROM `projeto-01-rota-b-claudia.dados_brutos.musicas_spotify`;
 
-
 -- Criação da tabela tratada de músicas concorrentes
--- Os valores nulos em in_shazam_charts foram substituídos por 0.
-
+-- Valores nulos em in_shazam_charts foram substituídos por 0,
+-- pois indicam ausência de presença nas paradas do Shazam.
 CREATE OR REPLACE TABLE `projeto-01-rota-b-claudia.dados_tratados.musicas_concorrentes_tratada` AS
 SELECT
   track_id,
