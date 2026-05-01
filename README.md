@@ -80,14 +80,15 @@ Os dados foram organizados em três camadas:
 ## 📁 Estrutura do Repositório
 
 📁 sql/  
-├── 01_identificacao_nulos.sql  
-├── 02_criacao_dados_brutos.sql  
-├── 03_criacao_dados_tratados.sql  
+├── 01_criacao_dados_brutos.sql  
+├── 02_criacao_dados_tratados.sql  
+├── 03_identificacao_nulos.sql  
 ├── 04_validacao_tratamento.sql  
 ├── 05_identificacao_duplicados.sql  
 ├── 06_remocao_duplicados.sql  
-├── 07_tratamento_numerico.sql  
-└── 08_join_tabelas.sql  
+├── 07_tratamento_categoricos.sql  
+├── 08_tratamento_numericos.sql  
+└── 09_join_tabelas.sql  
 
 📁 docs/  
 └── ficha_tecnica.md  
