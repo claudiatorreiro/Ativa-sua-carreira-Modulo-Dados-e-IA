@@ -14,10 +14,10 @@ Analisar dados de músicas do Spotify e plataformas concorrentes, garantindo qua
 
 ## 🛠️ Tecnologias utilizadas
 
-- Google BigQuery
-- SQL
-- GitHub (versionamento)
-- Metodologia de análise de dados
+- Google BigQuery  
+- SQL  
+- GitHub (versionamento)  
+- Metodologia de análise de dados  
 
 ---
 
@@ -25,60 +25,91 @@ Analisar dados de músicas do Spotify e plataformas concorrentes, garantindo qua
 
 Os dados foram organizados em três camadas:
 
-- **Insumos (`Insumos_Rota_B`)** → dados originais
-- **Dados Brutos (`dados_brutos`)** → cópia dos dados sem alteração
-- **Dados Tratados (`dados_tratados`)** → dados limpos e preparados para análise
+- **Insumos (`Insumos_Rota_B`)** → dados originais  
+- **Dados Brutos (`dados_brutos`)** → cópia dos dados sem alteração  
+- **Dados Tratados (`dados_tratados`)** → dados limpos e preparados para análise  
 
 ---
 
 ## 🔄 Pipeline de Dados
 
-1. Criação das tabelas de dados brutos
-2. Identificação de valores nulos
-3. Tratamento dos dados (valores nulos)
-4. Identificação de registros duplicados
-5. Validação dos dados tratados
+1. Criação das tabelas de dados brutos  
+2. Identificação de valores nulos  
+3. Tratamento de valores nulos  
+4. Identificação de registros duplicados  
+5. Remoção de duplicados  
+6. Tratamento de variáveis categóricas  
+7. Tratamento de variáveis numéricas  
+8. Junção das tabelas (JOIN)  
 
 ---
 
 ## 🔍 Principais Análises Realizadas
 
-- Identificação de valores nulos
-- Identificação de registros duplicados
-- Análise de consistência dos dados
-- Validação após tratamento
+- Identificação de valores nulos  
+- Identificação de registros duplicados  
+- Padronização de variáveis categóricas  
+- Conversão de tipos de dados (STRING → INTEGER)  
+- Identificação e tratamento de valores inconsistentes  
+- Validação da qualidade dos dados  
+- Integração de bases de dados  
 
 ---
 
 ## 🧩 Decisões de Tratamento
 
-- Valores nulos na coluna `in_shazam_charts` foram substituídos por 0, pois indicam ausência de presença nas paradas musicais.
-- A tabela de músicas do Spotify foi mantida sem alterações nesta etapa, pois não foram identificados valores nulos relevantes para tratamento imediato.
-  
+- Valores nulos na coluna `in_shazam_charts` foram substituídos por 0, pois indicam ausência de presença nas paradas musicais.  
+- Valores categóricos inconsistentes foram padronizados na coluna `main_music_genre`, tratando diferenças de escrita, espaços e valores nulos (substituídos por "Não informado").  
+- A coluna `in_spotify_playlists` foi convertida de STRING para INTEGER utilizando `SAFE_CAST`.  
+- Valores inválidos na coluna `streams` (ex: negativos) foram tratados e substituídos por NULL.  
+- Foi realizada validação dos dados numéricos utilizando funções `MIN` e `MAX` para garantir consistência.  
+- As tabelas foram integradas utilizando `track_id` como chave, após ajuste de tipagem entre as bases.  
+
+---
+
+## 🔗 Junção das Tabelas
+
+- Junção entre dados do Spotify e plataformas concorrentes (Apple, Deezer e Shazam)  
+- Chave utilizada: `track_id`  
+- Ajuste de tipo realizado para compatibilidade (INT64)  
+- Utilizado **LEFT JOIN** para preservar os dados do Spotify  
+- Validação final confirmou ausência de perda de dados e valores nulos nas colunas integradas  
+
 ---
 
 ## 📁 Estrutura do Repositório
 
-```
-📁 sql/
-├── 01_identificacao_nulos.sql
-├── 02_criacao_dados_brutos.sql
-├── 03_criacao_dados_tratados.sql
-├── 04_validacao_tratamento.sql
-├── 05_identificacao_duplicados.sql
-└── 06_remocao_duplicados.sql
+📁 sql/  
+├── 01_identificacao_nulos.sql  
+├── 02_criacao_dados_brutos.sql  
+├── 03_criacao_dados_tratados.sql  
+├── 04_validacao_tratamento.sql  
+├── 05_identificacao_duplicados.sql  
+├── 06_remocao_duplicados.sql  
+├── 07_tratamento_numerico.sql  
+└── 08_join_tabelas.sql  
 
-📁 docs/
-└── ficha_tecnica.md
-```
+📁 docs/  
+└── ficha_tecnica.md  
 
 ---
 
 ## 📌 Destaques Técnicos
 
-- Separação clara entre dados brutos e tratados
-- Uso de `GROUP BY` e `HAVING` para identificação de duplicidades
-- Validação de consistência após tratamento
+- Separação em camadas (insumos, brutos e tratados)  
+- Uso de `GROUP BY` e `HAVING` para identificação de duplicidades  
+- Uso de `CASE WHEN` para tratamento de dados categóricos  
+- Uso de `SAFE_CAST` para conversão segura de tipos  
+- Validação de consistência com `MIN` e `MAX`  
+- Integração de múltiplas fontes com JOIN  
+
+---
+
+## 📄 Dataset Final
+
+`dados_tratados.musicas_join_final`
+
+Base consolidada contendo dados do Spotify integrados com plataformas concorrentes.
 
 ---
 
@@ -92,9 +123,11 @@ A documentação detalhada do projeto está disponível em:
 
 ## 🚀 Próximos Passos
 
-- Análise exploratória dos dados
-- Criação de visualizações
-- Geração de insights de negócio
+- Análise exploratória dos dados  
+- Agrupamento e resumo de métricas  
+- Visualização de dados  
+- Geração de insights de negócio  
+- Construção de dashboard  
 
 ---
 
