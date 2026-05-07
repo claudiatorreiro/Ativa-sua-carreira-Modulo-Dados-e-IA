@@ -1,3 +1,4 @@
+````markdown id="m2n6wi"
 # 📊 Ficha Técnica – Projeto de Dados (Spotify e Concorrentes)
 
 ---
@@ -6,7 +7,7 @@
 
 Este projeto foi desenvolvido no módulo de **Dados e Inteligência Artificial da Laboratória**, como parte do programa **Ativa sua Carreira**.
 
-O foco é simular um cenário real de trabalho com dados, aplicando técnicas de **preparação, limpeza e organização de dados** utilizando SQL no BigQuery.
+O foco é simular um cenário real de trabalho com dados, aplicando técnicas de **preparação, limpeza, validação e organização de dados** utilizando SQL no BigQuery.
 
 ---
 
@@ -17,8 +18,9 @@ Preparar e tratar uma base de dados de músicas para garantir:
 - Qualidade e confiabilidade dos dados  
 - Consistência entre variáveis  
 - Eliminação de duplicidades  
-- Correção de tipos de dados  
 - Padronização de variáveis categóricas  
+- Tratamento de inconsistências numéricas  
+- Compatibilidade entre tipos de dados  
 - Integração entre diferentes fontes  
 
 A base final deve estar pronta para análise exploratória e geração de insights.
@@ -43,7 +45,8 @@ Cópia fiel dos dados originais para preservação:
 
 ```sql
 CREATE OR REPLACE TABLE `dados_brutos.musicas_spotify` AS
-SELECT * FROM `Insumos_Rota_B.musicas_spotify`;
+SELECT * 
+FROM `Insumos_Rota_B.musicas_spotify`;
 ```
 
 ---
@@ -52,10 +55,10 @@ SELECT * FROM `Insumos_Rota_B.musicas_spotify`;
 
 Estrutura final após aplicação das etapas de limpeza:
 
-- `musicas_spotify_tratada`
 - `musicas_spotify_sem_duplicados`
+- `musicas_spotify_numerico_tratado`
 - `musicas_spotify_categorico_tratado`
-- `musicas_spotify_numerico_final`
+- `musicas_spotify_final`
 - `musicas_concorrentes_tratada`
 - `musicas_join_final`
 
@@ -80,25 +83,28 @@ FROM `dados_brutos.musicas_spotify`;
 ```
 
 🔎 Resultado:
-- Presença de valores nulos em variáveis categóricas e numéricas
-- Necessidade de tratamento direcionado
+- Identificação de valores nulos em variáveis categóricas
+- Identificação de valores nulos em métricas de plataformas concorrentes
 
 ---
 
 ### 2. Tratamento de Valores Nulos
 
-Decisão aplicada:
+Tratamento aplicado na tabela de concorrentes:
 
 ```sql
-IFNULL(in_shazam_charts, 0) AS in_shazam_charts
+COALESCE(in_shazam_charts, 0) AS in_shazam_charts
 ```
 
 📌 Justificativa:
-Valores nulos representam ausência de ranking → substituídos por 0
+Valores nulos representam ausência de presença nas paradas musicais.
+
+✔ Resultado:
+- Eliminação dos valores nulos na coluna `in_shazam_charts`
 
 ---
 
-### 3. Validação do Tratamento
+### 3. Validação do Tratamento de Nulos
 
 ```sql
 SELECT
@@ -106,21 +112,24 @@ SELECT
 FROM `dados_tratados.musicas_concorrentes_tratada`;
 ```
 
-✔ Resultado: 0 valores nulos
+✔ Resultado:
+- 0 valores nulos restantes
 
 ---
 
 ### 4. Identificação de Duplicidades
 
 ```sql
-SELECT track_id, COUNT(*)
-FROM `dados_tratados.musicas_spotify_tratada`
+SELECT
+  track_id,
+  COUNT(*) AS quantidade
+FROM `dados_brutos.musicas_spotify`
 GROUP BY track_id
 HAVING COUNT(*) > 1;
 ```
 
 🔎 Resultado:
-- Identificação de registros duplicados por `track_id`
+- Identificação de registros duplicados utilizando `track_id` como chave
 
 ---
 
@@ -128,16 +137,13 @@ HAVING COUNT(*) > 1;
 
 ```sql
 CREATE OR REPLACE TABLE `dados_tratados.musicas_spotify_sem_duplicados` AS
-SELECT *
-FROM (
-  SELECT *,
-  ROW_NUMBER() OVER (PARTITION BY track_id ORDER BY track_id) AS row_num
-  FROM `dados_tratados.musicas_spotify_tratada`
-)
-WHERE row_num = 1;
+SELECT DISTINCT *
+FROM `dados_brutos.musicas_spotify`;
 ```
 
-✔ Resultado: Base sem duplicidades
+✔ Resultado:
+- Remoção de registros duplicados
+- Base validada sem repetição de `track_id`
 
 ---
 
@@ -146,59 +152,70 @@ WHERE row_num = 1;
 Padronização aplicada:
 
 ```sql
-CASE
-  WHEN main_music_genre IS NULL OR TRIM(main_music_genre) = '' THEN 'Não informado'
-  WHEN LOWER(TRIM(main_music_genre)) IN ('disco-pop', 'disco pop') THEN 'Disco pop'
-  ELSE TRIM(main_music_genre)
-END AS main_music_genre_tratado
+TRIM(main_music_genre) AS main_music_genre
 ```
 
 🔎 Problemas identificados:
-- Valores nulos
-- Variações de escrita
-- Inconsistência de formatação
+- Espaços extras
+- Diferenças de formatação
 
 ✔ Resultado:
-- Variável padronizada
+- Variáveis categóricas padronizadas
 - Redução de ruído na análise
+
+📌 Observação:
+Os valores nulos identificados nas variáveis categóricas foram mantidos devido à baixa representatividade na base.
 
 ---
 
 ### 7. Tratamento de Variáveis Numéricas
 
-Conversão de tipo:
-
-```sql
-SAFE_CAST(in_spotify_playlists AS INT64)
-```
-
-Correção de valores inválidos:
+Correção aplicada:
 
 ```sql
 CASE
   WHEN streams < 0 THEN NULL
   ELSE streams
-END AS streams_corrigido
+END AS streams_tratado
 ```
 
-Validação:
+🔎 Problema identificado:
+- Existência de valor negativo na variável `streams`
+
+Validação realizada:
 
 ```sql
 SELECT
-  MIN(in_spotify_playlists),
-  MAX(in_spotify_playlists),
-  MIN(streams_corrigido),
-  MAX(streams_corrigido)
-FROM `dados_tratados.musicas_spotify_numerico_final`;
+  MIN(streams_tratado),
+  MAX(streams_tratado)
+FROM `dados_tratados.musicas_spotify_numerico_tratado`;
 ```
 
 ✔ Resultado:
-- Tipos corrigidos
-- Valores consistentes
+- Valores negativos removidos
+- Variáveis numéricas consistentes para análise
 
 ---
 
-### 8. Junção das Tabelas (JOIN)
+### 8. Validação de Compatibilidade de Tipos
+
+Durante a integração das tabelas foi identificado conflito de tipos na coluna `track_id`:
+
+- Spotify → `INT64`
+- Concorrentes → `STRING`
+
+Correção aplicada:
+
+```sql
+CAST(s.track_id AS STRING)
+```
+
+✔ Resultado:
+- Compatibilidade garantida entre as tabelas
+
+---
+
+### 9. Junção das Tabelas (JOIN)
 
 ```sql
 CREATE OR REPLACE TABLE `dados_tratados.musicas_join_final` AS
@@ -211,27 +228,29 @@ SELECT
   c.in_deezer_charts,
   c.in_shazam_charts
 
-FROM `dados_tratados.musicas_spotify_numerico_final` s
+FROM `dados_tratados.musicas_spotify_final` s
 
 LEFT JOIN `dados_tratados.musicas_concorrentes_tratada` c
 ON CAST(s.track_id AS STRING) = c.track_id;
 ```
 
 📌 Estratégia:
-- LEFT JOIN para preservar dados do Spotify
-- CAST para compatibilização de tipos
+- Utilização de `LEFT JOIN` para preservar os dados do Spotify
+- Compatibilização de tipos utilizando `CAST`
 
-✔ Validação:
+✔ Validação realizada:
 
 ```sql
 SELECT
-  COUNTIF(in_apple_playlists IS NULL),
-  COUNTIF(in_deezer_playlists IS NULL),
-  COUNTIF(in_shazam_charts IS NULL)
+  COUNT(*) AS total_linhas,
+  COUNTIF(in_apple_playlists IS NULL) AS sem_match_concorrentes
 FROM `dados_tratados.musicas_join_final`;
 ```
 
-✔ Resultado: 0 inconsistências
+✔ Resultado:
+- JOIN realizado sem perda de registros
+- Nenhuma duplicidade identificada após integração
+- Correspondência completa entre as tabelas
 
 ---
 
@@ -239,34 +258,45 @@ FROM `dados_tratados.musicas_join_final`;
 
 Tabela consolidada:
 
-```
+```text
 dados_tratados.musicas_join_final
 ```
 
 Contendo:
+
 - Dados limpos
-- Sem duplicidade
-- Tipos corretos
-- Variáveis padronizadas
-- Integração entre plataformas
+- Sem duplicidades
+- Variáveis categóricas padronizadas
+- Variáveis numéricas validadas
+- Integração entre plataformas concorrentes
+- Base pronta para análise exploratória
 
 ---
 
 ## 📈 Status do Projeto
 
 ✔ Preparação de dados concluída  
-✔ Tratamento concluído  
-✔ Integração concluída  
-🔜 Próxima etapa: Análise exploratória  
+✔ Tratamento de dados concluído  
+✔ Integração das bases concluída  
+🔜 Próxima etapa: análise exploratória e geração de insights  
 
 ---
 
 ## 📌 Próximos Passos
 
 - Agrupar e resumir dados  
-- Criar métricas  
-- Explorar padrões  
+- Criar métricas e indicadores  
+- Explorar padrões de comportamento  
 - Gerar insights de negócio  
 - Construir dashboard  
 
 ---
+
+## 🔁 Processo de Revisão
+
+Durante o desenvolvimento, as tabelas tratadas foram removidas e recriadas para reforço do aprendizado e validação completa do pipeline de tratamento de dados.
+
+Esse processo permitiu revisar cada etapa individualmente, compreender melhor os erros encontrados e consolidar o entendimento sobre tratamento e integração de dados no BigQuery.
+
+---
+````
