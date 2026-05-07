@@ -1,4 +1,3 @@
-````markdown id="m2n6wi"
 # 📊 Ficha Técnica – Projeto de Dados (Spotify e Concorrentes)
 
 ---
@@ -45,7 +44,7 @@ Cópia fiel dos dados originais para preservação:
 
 ```sql
 CREATE OR REPLACE TABLE `dados_brutos.musicas_spotify` AS
-SELECT * 
+SELECT *
 FROM `Insumos_Rota_B.musicas_spotify`;
 ```
 
@@ -83,8 +82,9 @@ FROM `dados_brutos.musicas_spotify`;
 ```
 
 🔎 Resultado:
-- Identificação de valores nulos em variáveis categóricas
-- Identificação de valores nulos em métricas de plataformas concorrentes
+
+- Identificação de valores nulos em variáveis categóricas  
+- Identificação de valores nulos em métricas de plataformas concorrentes  
 
 ---
 
@@ -97,9 +97,11 @@ COALESCE(in_shazam_charts, 0) AS in_shazam_charts
 ```
 
 📌 Justificativa:
+
 Valores nulos representam ausência de presença nas paradas musicais.
 
 ✔ Resultado:
+
 - Eliminação dos valores nulos na coluna `in_shazam_charts`
 
 ---
@@ -113,6 +115,7 @@ FROM `dados_tratados.musicas_concorrentes_tratada`;
 ```
 
 ✔ Resultado:
+
 - 0 valores nulos restantes
 
 ---
@@ -129,6 +132,7 @@ HAVING COUNT(*) > 1;
 ```
 
 🔎 Resultado:
+
 - Identificação de registros duplicados utilizando `track_id` como chave
 
 ---
@@ -142,8 +146,9 @@ FROM `dados_brutos.musicas_spotify`;
 ```
 
 ✔ Resultado:
-- Remoção de registros duplicados
-- Base validada sem repetição de `track_id`
+
+- Remoção de registros duplicados  
+- Base validada sem repetição de `track_id`  
 
 ---
 
@@ -156,14 +161,17 @@ TRIM(main_music_genre) AS main_music_genre
 ```
 
 🔎 Problemas identificados:
-- Espaços extras
-- Diferenças de formatação
+
+- Espaços extras  
+- Diferenças de formatação  
 
 ✔ Resultado:
-- Variáveis categóricas padronizadas
-- Redução de ruído na análise
+
+- Variáveis categóricas padronizadas  
+- Redução de ruído na análise  
 
 📌 Observação:
+
 Os valores nulos identificados nas variáveis categóricas foram mantidos devido à baixa representatividade na base.
 
 ---
@@ -180,9 +188,10 @@ END AS streams_tratado
 ```
 
 🔎 Problema identificado:
+
 - Existência de valor negativo na variável `streams`
 
-Validação realizada:
+✔ Validação realizada:
 
 ```sql
 SELECT
@@ -192,8 +201,9 @@ FROM `dados_tratados.musicas_spotify_numerico_tratado`;
 ```
 
 ✔ Resultado:
-- Valores negativos removidos
-- Variáveis numéricas consistentes para análise
+
+- Valores negativos removidos  
+- Variáveis numéricas consistentes para análise  
 
 ---
 
@@ -201,16 +211,17 @@ FROM `dados_tratados.musicas_spotify_numerico_tratado`;
 
 Durante a integração das tabelas foi identificado conflito de tipos na coluna `track_id`:
 
-- Spotify → `INT64`
-- Concorrentes → `STRING`
+- Spotify → `INT64`  
+- Concorrentes → `STRING`  
 
-Correção aplicada:
+✔ Correção aplicada:
 
 ```sql
 CAST(s.track_id AS STRING)
 ```
 
 ✔ Resultado:
+
 - Compatibilidade garantida entre as tabelas
 
 ---
@@ -235,8 +246,9 @@ ON CAST(s.track_id AS STRING) = c.track_id;
 ```
 
 📌 Estratégia:
-- Utilização de `LEFT JOIN` para preservar os dados do Spotify
-- Compatibilização de tipos utilizando `CAST`
+
+- Utilização de `LEFT JOIN` para preservar os dados do Spotify  
+- Compatibilização de tipos utilizando `CAST`  
 
 ✔ Validação realizada:
 
@@ -248,9 +260,10 @@ FROM `dados_tratados.musicas_join_final`;
 ```
 
 ✔ Resultado:
-- JOIN realizado sem perda de registros
-- Nenhuma duplicidade identificada após integração
-- Correspondência completa entre as tabelas
+
+- JOIN realizado sem perda de registros  
+- Nenhuma duplicidade identificada após integração  
+- Correspondência completa entre as tabelas  
 
 ---
 
@@ -264,12 +277,12 @@ dados_tratados.musicas_join_final
 
 Contendo:
 
-- Dados limpos
-- Sem duplicidades
-- Variáveis categóricas padronizadas
-- Variáveis numéricas validadas
-- Integração entre plataformas concorrentes
-- Base pronta para análise exploratória
+- Dados limpos  
+- Sem duplicidades  
+- Variáveis categóricas padronizadas  
+- Variáveis numéricas validadas  
+- Integração entre plataformas concorrentes  
+- Base pronta para análise exploratória  
 
 ---
 
@@ -299,4 +312,17 @@ Durante o desenvolvimento, as tabelas tratadas foram removidas e recriadas para 
 Esse processo permitiu revisar cada etapa individualmente, compreender melhor os erros encontrados e consolidar o entendimento sobre tratamento e integração de dados no BigQuery.
 
 ---
-````
+
+## 🤝 Aprendizado Colaborativo
+
+O desenvolvimento do projeto também contou com trocas constantes entre as participantes do grupo da Laboratória.
+
+A colaboração foi fundamental para:
+
+- Revisar consultas SQL  
+- Identificar inconsistências  
+- Validar tratamentos  
+- Compreender erros de tipagem  
+- Fortalecer o aprendizado coletivo  
+
+---
