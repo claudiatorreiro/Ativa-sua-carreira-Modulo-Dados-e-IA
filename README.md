@@ -101,6 +101,34 @@ Esse processo permitiu revisar cada etapa individualmente, compreender melhor os
 📁 docs/
 └── ficha_tecnica.md
 ```
+---
+
+## 📋 Gestão do Projeto
+
+O projeto foi organizado utilizando metodologia ágil com acompanhamento das etapas por meio do Trello, permitindo:
+
+- Organização das tarefas por sprint  
+- Controle do pipeline de desenvolvimento  
+- Acompanhamento das etapas concluídas  
+- Planejamento das próximas análises  
+- Registro de revisões e validações  
+
+🔗 Board do projeto no Trello:  
+
+[Visualizar Trello](https://trello.com/invite/b/69f39c6117d105726b50ede2/ATTIb68227b8b8e62fe7ed049ad90e389ce8A66B0FCA/projeto-01-rota-b-dados-e-ia-laboratoria)
+
+As atividades foram divididas entre:
+
+- exploração dos dados;
+- tratamento e validação da base;
+- integração das tabelas;
+- análise exploratória;
+- agrupamento e resumo dos dados;
+- construção de tabelas dinâmicas;
+- visualização dos dados;
+- documentação técnica do projeto.
+
+Essa organização auxiliou no controle do fluxo de trabalho, na rastreabilidade das etapas executadas e na consolidação do aprendizado prático em análise de dados.
 
 ---
 
