@@ -5,6 +5,7 @@
 CREATE OR REPLACE TABLE `projeto-01-rota-b-claudia.dados_tratados.musicas_join_final` AS
 
 SELECT
+
     s.track_id,
     s.track_name,
     s.artists_name,
@@ -16,7 +17,7 @@ SELECT
     s.released_day,
     s.in_spotify_playlists,
     s.in_spotify_charts,
-    s.streams_corrigido,
+    s.streams,
 
     c.in_apple_playlists,
     c.in_apple_charts,
@@ -24,7 +25,8 @@ SELECT
     c.in_deezer_charts,
     c.in_shazam_charts
 
-FROM `projeto-01-rota-b-claudia.dados_tratados.musicas_spotify_numerico_final` AS s
+FROM `projeto-01-rota-b-claudia.dados_tratados.musicas_spotify_final` AS s
 
 LEFT JOIN `projeto-01-rota-b-claudia.dados_tratados.musicas_concorrentes_tratada` AS c
+
 ON CAST(s.track_id AS STRING) = c.track_id;
